@@ -7,11 +7,15 @@
 //
 
 #import "GameViewController.h"
+@import CoreMotion;
 
 @interface GameViewController()<UIActionSheetDelegate>
 
 @property(strong,nonatomic)SCNNode *cameraHodlerNode;
 @property(strong,nonatomic)SCNNode *cameraNode;
+
+@property (strong,nonatomic) CMMotionManager  *motionManager;
+@property (strong,nonatomic) NSOperationQueue *quene;
 
 @property(nonatomic)BOOL isLeft;
 
@@ -90,49 +94,47 @@
     
     
     [self rotateCameraNode];
+    [self startMotion];
 
 }
 
 - (void) handleTap:(UIGestureRecognizer*)gestureRecognize
 {
-//    // retrieve the SCNView
-//    SCNView *scnView = (SCNView *)self.view;
-//    
-//    // check what nodes are tapped
-//    CGPoint p = [gestureRecognize locationInView:scnView];
-//    NSArray *hitResults = [scnView hitTest:p options:nil];
-//    
-//    // check that we clicked on at least one object
-//    if([hitResults count] > 0){
-//        // retrieved the first clicked object
-//        SCNHitTestResult *result = [hitResults objectAtIndex:0];
-//        
-//        // get its material
-//        SCNMaterial *material = result.node.geometry.firstMaterial;
-//        
-//        // highlight it
-//        [SCNTransaction begin];
-//        [SCNTransaction setAnimationDuration:0.5];
-//        
-//        // on completion - unhighlight
-//        [SCNTransaction setCompletionBlock:^{
-//            [SCNTransaction begin];
-//            [SCNTransaction setAnimationDuration:0.5];
-//            
-//            material.emission.contents = [UIColor blackColor];
-//            
-//            [SCNTransaction commit];
-//        }];
-//        
-//        material.emission.contents = [UIColor redColor];
-//        
-//        [SCNTransaction commit];
-//    }
-    
-    
-    
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"退出" otherButtonTitles:@"模拟灯光", nil];
     [actionSheet showInView:self.view];
+}
+-(void)startMotion{
+
+    _quene = [[NSOperationQueue alloc] init];
+    
+    _motionManager=[[CMMotionManager alloc]init];
+    //判断加速计是否可用
+    if ([_motionManager isAccelerometerAvailable]) {
+        // 设置加速计频率
+        [_motionManager setAccelerometerUpdateInterval:1.0f/60];
+        //开始采样数据
+        [_motionManager startAccelerometerUpdatesToQueue:_quene withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
+      
+//            NSLog(@"X:%f,Y:%f,Z:%f",accelerometerData.acceleration.x,accelerometerData.acceleration.y,accelerometerData.acceleration.z);
+
+        }];
+        
+        [_motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *motion, NSError *error) {
+            
+            if(motion.userAcceleration.z<-0.02)
+             NSLog(@"X:%f,Y:%f,Z:%f",motion.userAcceleration.x,motion.userAcceleration.y,motion.userAcceleration.z);
+            
+            self.cameraNode.eulerAngles = SCNVector3Make(motion.attitude.roll-M_PI_2, motion.attitude.yaw,motion.attitude.pitch);
+        }];
+        
+        [_motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
+            
+        }];
+        
+    } else {
+        NSLog(@"博客园-FlyElephant");
+    }
+    
 }
 
 #pragma mark UIActionSheetDelegate
@@ -162,21 +164,19 @@
 
 -(void)rotateCameraNode{
 
-    // animate the 3d object
-//        [self.cameraHodlerNode runAction:[SCNAction repeatActionForever:[SCNAction rotateByX:0 y:2 z:0 duration:2]]];
     
-    float delay = 8.0f;
-    
-    [self.cameraHodlerNode runAction:[SCNAction rotateByX:0
-                                                        y:_isLeft?-2:2
-                                   z:0
-                            duration:delay]];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        _isLeft = !_isLeft;
-        [self rotateCameraNode];
-    });
+//    float delay = 8.0f;
+//    
+//    [self.cameraHodlerNode runAction:[SCNAction rotateByX:0
+//                                                        y:_isLeft?-2:2
+//                                   z:0
+//                            duration:delay]];
+//    
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        
+//        _isLeft = !_isLeft;
+//        [self rotateCameraNode];
+//    });
     
 }
 -(void)addLight{
@@ -204,7 +204,7 @@
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     
-    return UIInterfaceOrientationMaskLandscapeRight|UIInterfaceOrientationMaskLandscapeLeft;
+    return UIInterfaceOrientationMaskLandscapeLeft;
     
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation

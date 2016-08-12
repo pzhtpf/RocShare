@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		929C817D1D5D7B2900DFD6BF /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929C817C1D5D7B2900DFD6BF /* CoreMotion.framework */; };
 		BA0B3EA31D54B2ED00BD43E9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0B3EA21D54B2ED00BD43E9 /* main.m */; };
 		BA0B3EA61D54B2ED00BD43E9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0B3EA51D54B2ED00BD43E9 /* AppDelegate.m */; };
 		BA0B3EA81D54B2ED00BD43E9 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = BA0B3EA71D54B2ED00BD43E9 /* art.scnassets */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		929C817C1D5D7B2900DFD6BF /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		BA0B3E9E1D54B2ED00BD43E9 /* test3d.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test3d.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA0B3EA21D54B2ED00BD43E9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BA0B3EA41D54B2ED00BD43E9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -40,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				929C817D1D5D7B2900DFD6BF /* CoreMotion.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,6 +52,7 @@
 		BA0B3E951D54B2ED00BD43E9 = {
 			isa = PBXGroup;
 			children = (
+				929C817C1D5D7B2900DFD6BF /* CoreMotion.framework */,
 				BA0B3EA01D54B2ED00BD43E9 /* test3d */,
 				BA0B3E9F1D54B2ED00BD43E9 /* Products */,
 			);
@@ -121,7 +125,7 @@
 				TargetAttributes = {
 					BA0B3E9D1D54B2ED00BD43E9 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = CSRZWBWL27;
+						DevelopmentTeam = XMEFPZ9JH3;
 					};
 				};
 			};
